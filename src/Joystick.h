@@ -47,7 +47,7 @@ private:
     int8_t xError_, yError_;
 
 
-    static constexpr float twicePi_ = 3.1415926535897932384626433832795 * 2;
+    static constexpr float TWICE_PI = 3.1415926535897932384626433832795 * 2;
 };
 
 #endif
