@@ -40,6 +40,7 @@ public:
     uint16_t getAngle();
 
     uint8_t getDistance();
+
 private:
     static int8_t mapping(uint16_t val, int8_t error); //analogRead()の値をuint8_tの範囲にマッピングする
 
