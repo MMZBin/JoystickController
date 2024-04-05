@@ -8,9 +8,22 @@ This library is designed to simplify joystick control.
 
 ## 機能 Functions
 
-#### `Joystick(xPin, yPin, swPin)`
-  - Joystickオブジェクトを生成します。(x軸のピン, y軸のピン, スイッチのピン) Create a Joystick object. (x-axis pin, y-axis pin, switch pin)
+#### `enum class Dir`
+  - ジョイスティックが向いている方向を表します。 This indicates the direction the joystick is pointing.
+    - UP
+    - RIGHT_UP
+    - RIGHT
+    - RIGHT_DOWN
+    - DOWN
+    - LEFT_DOWN
+    - LEFT
+    - LEFT_UP
+    - CENTER
+
+#### `Joystick(xPin, yPin, swPin, deadZone)`
+  - Joystickオブジェクトを生成します。(x軸のピン, y軸のピン, スイッチのピン, デッドゾーン) Create a Joystick object. (x-axis pin, y-axis pin, switch pin, dead zone)
   - xPinとyPinはアナログ入力ピンに接続されている必要があります。 xPin and yPin should be connected to analog input pins.
+  - デッドゾーンは省略可能で、その場合は10に設定されます。 The dead zone is optional, and if omitted, it will be set to 10.
 
 #### `void calibrate()`
   - ジョイスティックの誤差を補正します。 Correct for any errors in the joystick.
@@ -36,6 +49,14 @@ This library is designed to simplify joystick control.
 #### `uint8_t getDistance()`
   - ジョイスティックの中心からの距離を取得します。 Retrieve the distance from the center of the joystick.
     - 範囲:0~181 Range: 0 to 181
+   
+#### `JoyStick::Dir getDirection(bool isFourSide)`
+  - ジョイスティックが向いている方向を取得します。 Retrieves the direction in which the joystick is pointing.
+  - 距離がデッドゾーン内だった場合はCENTERを返します。 Returns CENTER if the distance is within the dead zone.
+  - 引数は省略可能で、省略した場合はfalse(8方向モード)になります。 The argument is optional, and if omitted, it defaults to false (8-direction mode).
+    - isFourSide
+      - trueを指定すると4方向モード(UP, DOWN, RIGHT, LEFT)になります。 Specifying true will set it to 4-direction mode (UP, DOWN, RIGHT, LEFT).
+      - falseを指定すると8方向モードになります。  Specifying false will set it to 8-direction mode.
    
 ## 使用例 Usage Example
 
