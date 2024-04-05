@@ -18,7 +18,8 @@ This library is designed to simplify joystick control.
     - LEFT_DOWN
     - LEFT
     - LEFT_UP
-    - CENTER
+    - CENTER 
+  - 例 example: `JoyStick::Dir::UP`
 
 #### `Joystick(xPin, yPin, swPin, deadZone)`
   - Joystickオブジェクトを生成します。(x軸のピン, y軸のピン, スイッチのピン, デッドゾーン) Create a Joystick object. (x-axis pin, y-axis pin, switch pin, dead zone)
