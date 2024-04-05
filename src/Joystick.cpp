@@ -26,7 +26,10 @@
 #include <Arduino.h>
 #include "Joystick.h"
 
-Joystick::Joystick(uint8_t xPin, uint8_t yPin, uint8_t swPin) : xPin_(xPin), yPin_(yPin), swPin_(swPin), xError_(0), yError_(0) {
+#define TWICE_PI (3.1415926535897932384626433832795 * 2)
+
+Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone)
+ : xPin_(xPin), yPin_(yPin), swPin_(swPin), deadZone_(deadZone), xError_(0), yError_(0) {
     pinMode(xPin_, INPUT);
     pinMode(yPin_, INPUT);
     pinMode(swPin_, INPUT_PULLUP);
@@ -38,24 +41,52 @@ void Joystick::calibrate() {
     yError_ = mapping(analogRead(yPin_), 0);
 }
 
-int8_t Joystick::getX() { return mapping(analogRead(xPin_), xError_); }
-int8_t Joystick::getY() { return mapping(analogRead(yPin_), yError_); }
+int8_t Joystick::getX() const { return mapping(analogRead(xPin_), xError_); }
+int8_t Joystick::getY() const { return mapping(analogRead(yPin_), yError_); }
 
-bool Joystick::getSW() { return !digitalRead(swPin_); }
+bool Joystick::getSW() const { return !digitalRead(swPin_); }
 
-uint16_t Joystick::getAngle() {
+uint16_t Joystick::getAngle() const {
     float r = atan2(getY(), getX());
     if (r < 0) { r += TWICE_PI; } //角度が負の場合は正の範囲に直す
     return r * 360 / TWICE_PI; //度数法に変換する
 }
 
-uint8_t Joystick::getDistance() {
+uint8_t Joystick::getDistance() const {
     int32_t x = getX();
     int32_t y = getY();
     return sqrt(x*x + y*y);
 }
 
-int8_t Joystick::mapping(uint16_t val, int8_t error) {
+Joystick::Dir Joystick::getDirection(const bool isFourSide) const {
+    if (getDistance() < deadZone_) { return Dir::CENTER; }
+
+    uint16_t angle = getAngle();
+
+    //4方向モード(上下左右)の場合はこのブロックの中
+    if (isFourSide) {
+        //一方向あたり90°(正確には89°)
+        //45°(Dir::UPの90°の半分)スタート+90°刻みで判定していく
+        for (uint8_t i = 0; i < 4; i++) {
+            if (angle < (45+(90*i))) {
+                return static_cast<Dir>(i * 2);
+            }
+        }
+
+        return Dir::UP;
+    }
+
+    //方向一つあたり45°(正確には44°)
+    //22°(Dir::UPの45°の半分)スタート+45°刻みで判定していく
+    for (uint8_t i = 0; i < 8; i++) {
+        if (angle < (22+(45*i))) {
+            return static_cast<Dir>(i);
+        }
+    }
+    return Dir::UP;
+}
+
+int8_t Joystick::mapping(const uint16_t val, const int8_t error) {
     int16_t mappedVal = (val / 4) - (128 + error);
 
     //値がint8_tの範囲を超えている場合はクリップする
@@ -64,3 +95,5 @@ int8_t Joystick::mapping(uint16_t val, int8_t error) {
 
     return mappedVal;
 }
+
+#undef TWICE_PI
