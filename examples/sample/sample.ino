@@ -37,6 +37,9 @@ void loop() {
   Serial.print("Distance=");
   Serial.println(joy.getDistance());
 
+  Serial.print("Direction=");
+  Serial.println(static_cast<uint8_t>(joy.getDirection()));
+
                //1秒待つ
   delay(1000); //Wait for 1 second.
 }
