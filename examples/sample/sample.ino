@@ -37,6 +37,8 @@ void loop() {
   Serial.print("Distance=");
   Serial.println(joy.getDistance());
 
+  //ジョイスティックが向いている方向を表示(数値型に変換しているので0~8の整数で表示されます。)
+  //Displaying the direction in which the joystick is pointing (as it's being converted to a numerical type, it will be displayed as an integer from 0 to 8).
   Serial.print("Direction=");
   Serial.println(static_cast<uint8_t>(joy.getDirection()));
 
