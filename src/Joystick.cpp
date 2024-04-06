@@ -22,14 +22,13 @@
     SOFTWARE.
 */
 
-
 #include <Arduino.h>
 #include "Joystick.h"
 
 #define TWICE_PI (3.1415926535897932384626433832795 * 2)
 
-Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone)
- : xPin_(xPin), yPin_(yPin), swPin_(swPin), deadZone_(deadZone), xError_(0), yError_(0) {
+Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const bool isFourSide, const uint8_t deadZone, const uint8_t rotate)
+ : xPin_(xPin), yPin_(yPin), swPin_(swPin), deadZone_(deadZone), ROTATE(4 - (rotate % 4)), xError_(0), yError_(0), isFourSide_(isFourSide) {
     pinMode(xPin_, INPUT);
     pinMode(yPin_, INPUT);
     pinMode(swPin_, INPUT_PULLUP);
@@ -58,6 +57,7 @@ uint8_t Joystick::getDistance() const {
     return sqrt(x*x + y*y);
 }
 
+Joystick::Dir Joystick::getDirection() const { return getDirection(isFourSide_); }
 Joystick::Dir Joystick::getDirection(const bool isFourSide) const {
     if (getDistance() < deadZone_) { return Dir::CENTER; }
 
@@ -69,25 +69,37 @@ Joystick::Dir Joystick::getDirection(const bool isFourSide) const {
         //45°(Dir::UPの90°の半分)スタート+90°刻みで判定していく
         for (uint8_t i = 0; i < 4; i++) {
             if (angle < (45+(90*i))) {
-                return static_cast<Dir>(i * 2);
+                return getDirEnum(i * 2);
             }
         }
 
-        return Dir::UP;
+        return static_cast<Dir>(ROTATE*2);
     }
 
     //方向一つあたり45°(正確には44°)
     //22°(Dir::UPの45°の半分)スタート+45°刻みで判定していく
     for (uint8_t i = 0; i < 8; i++) {
         if (angle < (22+(45*i))) {
-            return static_cast<Dir>(i);
+            return getDirEnum(i);
         }
     }
-    return Dir::UP;
+    return static_cast<Dir>(ROTATE*2);
+}
+
+bool Joystick::getDirection(const Dir dir) const { return getDirection(dir, isFourSide_); }
+bool Joystick::getDirection(const Dir dir, const bool isFourSide) const {
+    return getDirection(isFourSide) == dir;
+}
+
+bool Joystick::isFourSideMode() const { return isFourSide_; }
+void Joystick::setFourSideMode(bool mode) { isFourSide_ = mode; }
+
+Joystick::Dir Joystick::getDirEnum(const uint8_t index) const {
+    return static_cast<Dir>((index + (ROTATE*2)) % 8);
 }
 
 int8_t Joystick::mapping(const uint16_t val, const int8_t error) {
-    int16_t mappedVal = (val / 4) - (128 + error);
+    int16_t mappedVal = (val >> 2) - (128 + error); //4で割って0が中心になるようにオフセットする
 
     //値がint8_tの範囲を超えている場合はクリップする
     if (mappedVal > 127) { mappedVal = 127; }

@@ -39,7 +39,7 @@ public:
         CENTER      //距離がdeadZone未満の場合
     };
 
-    Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone=10);
+    Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const bool isFourSide=false, const uint8_t deadZone=10, const uint8_t rotate=0);
 
     void calibrate(); //実行時にジョイスティックが中立状態である必要があります。
 
@@ -53,13 +53,23 @@ public:
 
     uint8_t getDistance() const;
 
-    Joystick::Dir getDirection(const bool isFourSide=false) const;
+    Joystick::Dir getDirection() const;
+    Joystick::Dir getDirection(const bool isFourSide) const;
+    bool getDirection(const Dir dir) const;
+    bool getDirection(const Dir dir, const bool isFourSide) const;
+
+    bool isFourSideMode() const;
+    void setFourSideMode(bool mode);
 
 private:
+    Joystick::Dir getDirEnum(const uint8_t index) const;
+
     static int8_t mapping(const uint16_t val, const int8_t error); //analogRead()の値をuint8_tの範囲にマッピングする
 
     uint8_t xPin_, yPin_, swPin_, deadZone_;
+    const uint8_t ROTATE;
     int8_t xError_, yError_;
+    bool isFourSide_;
 };
 
 #endif
