@@ -27,7 +27,7 @@
 
 #define TWICE_PI (3.1415926535897932384626433832795 * 2)
 
-Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const bool isFourSide, const uint8_t deadZone, const uint8_t rotate)
+Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone, const uint8_t rotate, const bool isFourSide)
  : xPin_(xPin), yPin_(yPin), swPin_(swPin), deadZone_(deadZone), ROTATE(4 - (rotate % 4)), xError_(0), yError_(0), isFourSide_(isFourSide) {
     pinMode(xPin_, INPUT);
     pinMode(yPin_, INPUT);
@@ -92,7 +92,7 @@ bool Joystick::getDirection(const Dir dir, const bool isFourSide) const {
 }
 
 bool Joystick::isFourSideMode() const { return isFourSide_; }
-void Joystick::setFourSideMode(bool mode) { isFourSide_ = mode; }
+void Joystick::setFourSideMode(const bool mode) { isFourSide_ = mode; }
 
 Joystick::Dir Joystick::getDirEnum(const uint8_t index) const {
     return static_cast<Dir>((index + (ROTATE*2)) % 8);

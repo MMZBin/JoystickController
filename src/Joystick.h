@@ -39,7 +39,7 @@ public:
         CENTER      //距離がdeadZone未満の場合
     };
 
-    Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const bool isFourSide=false, const uint8_t deadZone=10, const uint8_t rotate=0);
+    Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone=10, const uint8_t rotate=0, const bool isFourSide=false);
 
     void calibrate(); //実行時にジョイスティックが中立状態である必要があります。
 
@@ -59,7 +59,7 @@ public:
     bool getDirection(const Dir dir, const bool isFourSide) const;
 
     bool isFourSideMode() const;
-    void setFourSideMode(bool mode);
+    void setFourSideMode(const bool mode);
 
 private:
     Joystick::Dir getDirEnum(const uint8_t index) const;
