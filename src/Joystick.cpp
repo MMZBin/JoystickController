@@ -43,7 +43,7 @@ void Joystick::calibrate() {
 int8_t Joystick::getX() const { return mapping(analogRead(xPin_), xError_); }
 int8_t Joystick::getY() const { return mapping(analogRead(yPin_), yError_); }
 
-bool Joystick::getSW() const { return !digitalRead(swPin_); }
+bool Joystick::getSW() const { return (swPin_ == 0xFF) ? false : !digitalRead(swPin_); }
 
 uint16_t Joystick::getAngle() const {
     float r = atan2(getY(), getX());
@@ -92,7 +92,7 @@ bool Joystick::getDirection(const Dir dir, const bool isFourSide) const {
 }
 
 bool Joystick::isFourSideMode() const { return isFourSide_; }
-void Joystick::setFourSideMode(const bool mode) { isFourSide_ = mode; }
+void Joystick::setFourSideMode(bool mode) { isFourSide_ = mode; }
 
 Joystick::Dir Joystick::getDirEnum(const uint8_t index) const {
     return static_cast<Dir>((index + (ROTATE*2)) % 8);
