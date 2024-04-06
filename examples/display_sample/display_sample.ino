@@ -1,7 +1,16 @@
 #include <Joystick.h>
 
-                          //Joystickオブジェクトを生成(X軸, Y軸, スイッチ)
-Joystick joy(A0, A1, A2); //Generate a Joystick object (X-axis, Y-axis, Switch).
+const uint8_t xPin = A0;
+const uint8_t yPin = A1;
+const uint8_t swPin = A2;
+
+const uint8_t deadZone = 10;   //距離が10以内なら中立として扱う
+const uint8_t rotate = 0;      //ジョイスティックの向きを90°単位で設定(0~3)
+const bool isFourSide = false; //ジョイスティックの向きを8方向で表現する
+
+//Joystickオブジェクトを生成(X軸, Y軸, スイッチ, デッドゾーン, ジョイスティックの向き(0~3), 4方向モードかどうか)
+//Generate a Joystick object (X-axis, Y-axis, Switch, dead zone, The orientation of the joystick(0~3), Whether it is in 4-direction mode or not).
+Joystick joy(xPin, yPin, swPin, deadZone, rotate, isFourSide);
 
 void setup() {
                       //シリアル通信を開始(表示用)
