@@ -27,6 +27,7 @@ This library is designed to simplify joystick control.
   - 第三引数以降は省略可能です。 The third argument onwards is optional.
     - `xPin`:ジョイスティックのX軸方向の傾きが入力されるピン Pin for input of the joystick's tilt in the X-axis direction.
     - `yPin`:ジョイスティックのY軸方向の傾きが入力されるピン  Pin for input of the joystick's tilt in the Y-axis direction.
+    - `swPin`:ジョイスティックのスイッチ(存在しない場合は省略するか255を指定してください。) The joystick switch (if it doesn't exist, please either omit it or specify 255).
     - `deadZone`:ジョイスティックのデッドゾーン(中立範囲) デフォルト値は10です。  Dead zone (neutral range) of the joystick. Default value is 10.
     - `rotate`:ジョイスティックの向き(0=0°/1=90°/2=180°/3=270°) デフォルト値は0です。 Rotation of the joystick (0=0°/1=90°/2=180°/3=270°). Default value is 0.
     - `isFourSide`:方向を4方向で表現するか8方向で表現するかを指定します。 デフォルト値はfalseです。 Specifies whether to express the direction in 4 directions or 8 directions.  Default value is false.
