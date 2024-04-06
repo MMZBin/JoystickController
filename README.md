@@ -21,10 +21,15 @@ This library is designed to simplify joystick control.
     - CENTER 
   - 例 example: `JoyStick::Dir::UP`
 
-#### `Joystick(xPin, yPin, swPin, deadZone)`
-  - Joystickオブジェクトを生成します。(x軸のピン, y軸のピン, スイッチのピン, デッドゾーン) Create a Joystick object. (x-axis pin, y-axis pin, switch pin, dead zone)
+#### `Joystick(uint8_t xPin, uint8_t yPin, uint8_t swPin, uint8_t deadZone, uint8_t rotate, bool isFourSide)`
+  - Joystickオブジェクトを生成します。(x軸のピン, y軸のピン, スイッチのピン, デッドゾーン) Create a Joystick object. (x-axis pin, y-axis pin, switch pin, dead zone, rotate, four side mode)
   - xPinとyPinはアナログ入力ピンに接続されている必要があります。 xPin and yPin should be connected to analog input pins.
-  - デッドゾーンは省略可能で、その場合は10に設定されます。 The dead zone is optional, and if omitted, it will be set to 10.
+  - 第三引数以降は省略可能です。 The third argument onwards is optional.
+    - `xPin`:ジョイスティックのX軸方向の傾きが入力されるピン Pin for input of the joystick's tilt in the X-axis direction.
+    - `yPin`:ジョイスティックのY軸方向の傾きが入力されるピン  Pin for input of the joystick's tilt in the Y-axis direction.
+    - `deadZone`:ジョイスティックのデッドゾーン(中立範囲) デフォルト値は10です。  Dead zone (neutral range) of the joystick. Default value is 10.
+    - `rotate`:ジョイスティックの向き(0=0°/1=90°/2=180°/3=270°) デフォルト値は0です。 Rotation of the joystick (0=0°/1=90°/2=180°/3=270°). Default value is 0.
+    - `isFourSide`:方向を4方向で表現するか8方向で表現するかを指定します。 デフォルト値はfalseです。 Specifies whether to express the direction in 4 directions or 8 directions.  Default value is false.
   - 例 example: `JoyStick joy(A0, A1, 2, 50)`
 
 #### `void calibrate()`
@@ -57,15 +62,31 @@ This library is designed to simplify joystick control.
   - ジョイスティックの中心からの距離を取得します。 Retrieve the distance from the center of the joystick.
     - 範囲:0~181 Range: 0 to 181
   - 例 example: `uint8_t distance = joy.getDistance()`
-   
+
 #### `JoyStick::Dir getDirection(bool isFourSide)`
   - ジョイスティックが向いている方向を取得します。 Retrieves the direction in which the joystick is pointing.
   - 距離がデッドゾーン内だった場合はCENTERを返します。 Returns CENTER if the distance is within the dead zone.
-  - 引数は省略可能で、省略した場合はfalse(8方向モード)になります。 The argument is optional, and if omitted, it defaults to false (8-direction mode).
     - isFourSide
+      - 省略可能で、省略した場合は全体の設定が適用されます。 Optional, and if omitted, the overall settings will be applied.
       - trueを指定すると4方向モード(UP, DOWN, RIGHT, LEFT)になります。 Specifying true will set it to 4-direction mode (UP, DOWN, RIGHT, LEFT).
       - falseを指定すると8方向モードになります。  Specifying false will set it to 8-direction mode.
   - 例 example: `JoyStick::Dir direction = joy.getDirection()`
+
+#### `bool getDirection(Dir dir, bool isFourSide)`
+  - ジョイスティックが指定した方向を向いているか調べます。 Checks if the joystick is pointing in the specified direction.
+  - 第二引数は省略可能で、省略した場合は全体の設定が適用されます。 The second argument is optional, and if omitted, the overall settings will be applied.
+  - 他の仕様は上と同じです。 Other specifications are the same as above.
+  - 例 example:`if (joy.getDirection(Joystick::Dir::UP) {  })`
+
+#### `bool isFourSideMode()`
+  - 4方向モードが有効かどうかを調べます。 Checks if 4-direction mode is enabled.
+    - 4方向モードならtrue, 8方向モードならfalseを返します。 Returns true if 4-direction mode is enabled, false if 8-direction mode is enabled.
+  - 例 example:`bool mode = joy.isFourSideMode()`
+   
+#### `void setFourSideMode(bool mode)`
+  - 4方向モードか8方向モードかを設定します。 Sets whether it's in 4-direction mode or 8-direction mode.
+    - trueで4方向モード,falseで8方向モードに設定されます。 Sets to 4-direction mode if true, and 8-direction mode if false.
+  - 例 example:`joy.setFourSideMode(true)`
    
 ## 使用例 Usage Example
 
