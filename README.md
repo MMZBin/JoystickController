@@ -76,7 +76,7 @@ This library is designed to simplify joystick control.
   - ジョイスティックが指定した方向を向いているか調べます。 Checks if the joystick is pointing in the specified direction.
   - 第二引数は省略可能で、省略した場合は全体の設定が適用されます。 The second argument is optional, and if omitted, the overall settings will be applied.
   - 他の仕様は上と同じです。 Other specifications are the same as above.
-  - 例 example:`if (joy.getDirection(Joystick::Dir::UP) {  })`
+  - 例 example:`if (joy.getDirection(Joystick::Dir::UP)) {  }`
 
 #### `bool isFourSideMode()`
   - 4方向モードが有効かどうかを調べます。 Checks if 4-direction mode is enabled.
