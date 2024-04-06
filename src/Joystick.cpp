@@ -28,22 +28,22 @@
 #define TWICE_PI (3.1415926535897932384626433832795 * 2)
 
 Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone, const uint8_t rotate, const bool isFourSide)
- : xPin_(xPin), yPin_(yPin), swPin_(swPin), deadZone_(deadZone), ROTATE(4 - (rotate % 4)), xError_(0), yError_(0), isFourSide_(isFourSide) {
-    pinMode(xPin_, INPUT);
-    pinMode(yPin_, INPUT);
-    pinMode(swPin_, INPUT_PULLUP);
+ : X_PIN(xPin), Y_PIN(yPin), SW_PIN(swPin), DEAD_ZONE(deadZone), ROTATE(4 - (rotate % 4)), xError_(0), yError_(0), isFourSide_(isFourSide) {
+    pinMode(X_PIN, INPUT);
+    pinMode(Y_PIN, INPUT);
+    if (swPin != 0xFF) { pinMode(SW_PIN, INPUT_PULLUP); }
 }
 
 void Joystick::calibrate() {
     //補正0で読み取った値を代入
-    xError_ = mapping(analogRead(xPin_), 0);
-    yError_ = mapping(analogRead(yPin_), 0);
+    xError_ = mapping(analogRead(X_PIN), 0);
+    yError_ = mapping(analogRead(Y_PIN), 0);
 }
 
-int8_t Joystick::getX() const { return mapping(analogRead(xPin_), xError_); }
-int8_t Joystick::getY() const { return mapping(analogRead(yPin_), yError_); }
+int8_t Joystick::getX() const { return mapping(analogRead(X_PIN), xError_); }
+int8_t Joystick::getY() const { return mapping(analogRead(Y_PIN), yError_); }
 
-bool Joystick::getSW() const { return (swPin_ == 0xFF) ? false : !digitalRead(swPin_); }
+bool Joystick::getSW() const { return (SW_PIN == 0xFF) ? false : !digitalRead(SW_PIN); }
 
 uint16_t Joystick::getAngle() const {
     float r = atan2(getY(), getX());
@@ -59,7 +59,7 @@ uint8_t Joystick::getDistance() const {
 
 Joystick::Dir Joystick::getDirection() const { return getDirection(isFourSide_); }
 Joystick::Dir Joystick::getDirection(const bool isFourSide) const {
-    if (getDistance() < deadZone_) { return Dir::CENTER; }
+    if (getDistance() < DEAD_ZONE) { return Dir::CENTER; }
 
     uint16_t angle = getAngle();
 

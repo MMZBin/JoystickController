@@ -66,8 +66,7 @@ private:
 
     static int8_t mapping(const uint16_t val, const int8_t error); //analogRead()の値をuint8_tの範囲にマッピングする
 
-    const uint8_t xPin_, yPin_, swPin_, deadZone_;
-    const uint8_t ROTATE;
+    const uint8_t X_PIN, Y_PIN, SW_PIN, DEAD_ZONE, ROTATE;
     int8_t xError_, yError_;
 
     bool isFourSide_;
