@@ -70,7 +70,6 @@ private:
     int8_t xError_, yError_;
 
     bool isFourSide_;
-    bool isInitialized_;
 };
 
 #endif
