@@ -10,6 +10,10 @@ const bool isFourSide = false; //ジョイスティックの向きを8方向で�
 
 //Joystickオブジェクトを生成(X軸, Y軸, スイッチ, デッドゾーン, ジョイスティックの向き(0~3), 4方向モードかどうか)
 //Generate a Joystick object (X-axis, Y-axis, Switch, dead zone, The orientation of the joystick(0~3), Whether it is in 4-direction mode or not).
+
+//スイッチピンのない製品の場合はswPin以降の引数を省略するか、swPinに255を指定してください。
+//For products without a switch pin, please either omit the `swPin` and subsequent parameters or specify 255 for `swPin`.
+
 Joystick joy(xPin, yPin, swPin, deadZone, rotate, isFourSide);
 
 void setup() {
