@@ -4,9 +4,9 @@ const uint8_t xPin = A0;
 const uint8_t yPin = A1;
 const uint8_t swPin = A2;
 
-const uint8_t deadZone = 10;   //距離が10以内なら中立として扱う
-const uint8_t rotate = 0;      //ジョイスティックの向きを90°単位で設定(0~3)
-const bool isFourSide = false; //ジョイスティックの向きを8方向で表現する
+const uint8_t deadZone = 10;   //距離が10以内なら中立として扱う Treating it as neutral if the distance is within 10 units.
+const uint8_t rotate = 0;      //ジョイスティックの向きを90°単位で設定(0~3) Setting the orientation of the joystick in 90° increments (0 to 3).
+const bool isFourSide = false; //ジョイスティックの向きを8方向で表現する Expressing the orientation of the joystick in 8 directions.
 
 //Joystickオブジェクトを生成(X軸, Y軸, スイッチ, デッドゾーン, ジョイスティックの向き(0~3), 4方向モードかどうか)
 //Generate a Joystick object (X-axis, Y-axis, Switch, dead zone, The orientation of the joystick(0~3), Whether it is in 4-direction mode or not).
