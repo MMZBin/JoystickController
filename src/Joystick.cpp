@@ -48,7 +48,7 @@ bool Joystick::getSW() const { return (SW_PIN == 0xFF) ? false : !digitalRead(SW
 uint16_t Joystick::getAngle() const {
     float r = atan2(getY(), getX());
     if (r < 0) { r += TWICE_PI; } //角度が負の場合は正の範囲に直す
-    return static_cast<uint16_t>((r * 360 / TWICE_PI) + (90 * ROTATE)) % (360 + 1); //度数法に変換する
+    return static_cast<uint16_t>((r * 360 / TWICE_PI) + (90 * ROTATE)) % 360; //度数法に変換する
 }
 
 uint8_t Joystick::getDistance() const {
