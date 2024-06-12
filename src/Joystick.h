@@ -62,7 +62,16 @@ public:
     void setFourSideMode(bool mode);
 
 private:
-    static int8_t mapping(const uint16_t val, const int8_t error); //analogRead()の値をuint8_tの範囲にマッピングする
+    //analogRead()の値をuint8_tの範囲にマッピングする
+    static inline int8_t mapping(const uint16_t val, const int8_t error) {
+        int16_t mappedVal = (val >> 2) - (128 + error); //4で割って0が中心になるようにオフセットする
+
+        //値がint8_tの範囲を超えている場合はクリップする
+        if (mappedVal > 127) { mappedVal = 127; }
+        else if (mappedVal < -128) { mappedVal = -128; }
+
+        return mappedVal;
+    }
 
     const uint8_t X_PIN, Y_PIN, SW_PIN, DEAD_ZONE, ROTATE;
     int8_t xError_, yError_;

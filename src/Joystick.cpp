@@ -25,7 +25,7 @@
 #include <Arduino.h>
 #include "Joystick.h"
 
-#define TWICE_PI (3.1415926535897932384626433832795 * 2)
+#define TWICE_PI 6.283185307179586
 
 Joystick::Joystick(const uint8_t xPin, const uint8_t yPin, const uint8_t swPin, const uint8_t deadZone, const uint8_t rotate, const bool isFourSide)
  : X_PIN(xPin), Y_PIN(yPin), SW_PIN(swPin), DEAD_ZONE(deadZone), ROTATE(4 - (rotate % 4)), xError_(0), yError_(0), isFourSide_(isFourSide) {
@@ -93,15 +93,5 @@ bool Joystick::getDirection(const Dir dir, const bool isFourSide) const {
 
 bool Joystick::isFourSideMode() const { return isFourSide_; }
 void Joystick::setFourSideMode(bool mode) { isFourSide_ = mode; }
-
-int8_t Joystick::mapping(const uint16_t val, const int8_t error) {
-    int16_t mappedVal = (val >> 2) - (128 + error); //4で割って0が中心になるようにオフセットする
-
-    //値がint8_tの範囲を超えている場合はクリップする
-    if (mappedVal > 127) { mappedVal = 127; }
-    else if (mappedVal < -128) { mappedVal = -128; }
-
-    return mappedVal;
-}
 
 #undef TWICE_PI
